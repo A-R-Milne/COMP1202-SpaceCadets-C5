@@ -14,7 +14,7 @@ public class Main {
     
     public void go() {
         JFrame frame = new JFrame();
-        JPanel panel = new JPanel();
+        Container panel = frame.getContentPane();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         HashMap<Boolean,String> fonts = new HashMap<>();
         boolean renogareDownloaded = false;
@@ -30,15 +30,15 @@ public class Main {
         }
         panel.add(addLabel("Shape:", fonts.get(renogareDownloaded)));
         panel.add(addLabel("Fixed Radius"));
-        JSlider bigR = addSlider(0, 160, 10, 20);
+        JSlider bigR = addSlider(0, 400, 20, 40);
         panel.add(bigR);
 
         panel.add(addLabel("Moving Radius"));
-        JSlider littleR = addSlider(0, 80, 5, 10);
+        JSlider littleR = addSlider(0, 200, 10, 20);
         panel.add(littleR);
 
         panel.add(addLabel("Offset"));
-        JSlider o = addSlider(0, 25, 1, 5);
+        JSlider o = addSlider(0, 200, 10, 20);
         panel.add(o);
 
         panel.add(addLabel("Loops"));
@@ -65,7 +65,7 @@ public class Main {
 
         panel.add(Box.createVerticalStrut(10));
         JButton reset = new JButton("Reset");
-        goButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        reset.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(reset);
         
         panel.add(Box.createVerticalStrut(10));
@@ -74,9 +74,8 @@ public class Main {
         Canvas canvas = new Canvas();
         canvas.setBackground(Color.WHITE);
         panel.add(canvas);
-        frame.add(panel);
         
-        frame.setSize(800, 900);
+        frame.setSize(1000, 1400);
         frame.setVisible(true);
         
         frame.addWindowListener(new WindowAdapter() {
@@ -85,8 +84,16 @@ public class Main {
                 System.exit(0);
             }
         });
-        goButton.addActionListener(e -> canvas.paintComponents(bigR.getValue(), littleR.getValue(), o.getValue(), red.getValue(), green.getValue(), blue.getValue(), loops.getValue()));
+        goButton.addActionListener(e -> paintComponents(bigR.getValue(), littleR.getValue(), o.getValue(), red.getValue(), green.getValue(), blue.getValue(), loops.getValue(), canvas));
         reset.addActionListener(e -> canvas.clear());
+    }
+    
+    private void paintComponents(int bigR, int littleR, int o, int red, int green, int blue, int loops, Canvas canvas) {
+        if(bigR >= littleR && littleR >= o) {
+            canvas.paintComponents(bigR, littleR, o, red, green, blue, loops);
+        } else {
+            JOptionPane.showMessageDialog(null, "The fixed radius must be greater than the moving radius, which must be greater than the offset.","Error!",JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     public JSlider addSlider(int min, int max, int space, int labelSpace) {
@@ -116,6 +123,7 @@ public class Main {
 
     public JLabel addLabel(String text, String font) {
         JLabel label = addLabel(text);
+        label.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         label.setFont(new Font(font, Font.PLAIN, 20));
         label.setBackground(Color.WHITE);
         return label;
