@@ -1,0 +1,2 @@
+Order: Fixed Radius, Moving Radius, Offset
+280, 190, 140

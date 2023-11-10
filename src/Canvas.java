@@ -15,6 +15,7 @@ public class Canvas extends JPanel {
             loopsComplete++;
             while(getT() < 2*Math.PI*loopsComplete) {
                 drawPoint(littleR, bigR, o);
+                try {Thread.sleep(2);} catch (InterruptedException ignored) {}
             }
         }
     }
